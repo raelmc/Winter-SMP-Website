@@ -58,7 +58,7 @@
   const qaList = document.querySelector("#qa-list");
   faqItems.forEach(({ question, answer }, index) => {
     const details = document.createElement("details");
-    details.className = "glass qa-item";
+    details.className = "glass qa-item reveal";
     const summary = document.createElement("summary");
     const title = document.createElement("strong");
     title.textContent = question;
@@ -133,13 +133,17 @@
     })).filter((group) => group.targets.length);
     if (footer) revealGroups.push({ trigger: footer, targets: [footer] });
 
+    // Reveal targets already carry their initial CSS state in the HTML. Keep the
+    // timeline primed before its first animation; never hide targets from JS.
     revealGroups.forEach((group) => {
-      group.targets.forEach((target) => target.classList.add("reveal"));
       if (group.trigger.id === "progression") group.trigger.classList.add("timeline-ready");
     });
     const revealGroup = ({ trigger, targets }) => {
       if (trigger.id === "progression") trigger.classList.add("timeline-started");
-      targets.forEach((target) => { target.style.setProperty("--reveal-delay", "0ms"); target.classList.add("is-visible"); });
+      targets.forEach((target, index) => {
+        target.style.setProperty("--reveal-delay", `${index * 110}ms`);
+        target.classList.add("is-visible");
+      });
     };
     let revealCheckPending = false;
     const checkRevealPositions = () => {
@@ -147,11 +151,12 @@
       const triggerY = window.innerHeight * 0.53;
       const nearPageEnd = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 80;
       revealGroups.forEach(({ trigger, targets }) => {
-        if (targets.every((target) => target.classList.contains("is-visible"))) return;
+        const pendingTargets = targets.filter((target) => !target.classList.contains("is-visible"));
+        if (!pendingTargets.length) return;
         const sectionReached = trigger.getBoundingClientRect().top <= triggerY;
         const isTeamOrFooter = trigger.id === "team" || trigger.matches("footer.site-footer");
         if (!sectionReached && !(nearPageEnd && isTeamOrFooter)) return;
-        revealGroup({ trigger, targets });
+        revealGroup({ trigger, targets: pendingTargets });
       });
     };
     const scheduleRevealCheck = () => {
@@ -167,8 +172,13 @@
     });
     window.addEventListener("scroll", scheduleRevealCheck, { passive: true });
     window.addEventListener("resize", scheduleRevealCheck, { passive: true });
+    // Re-check after anchor jumps, browser scroll restoration, and late layout changes.
+    window.addEventListener("hashchange", scheduleRevealCheck);
+    window.addEventListener("pageshow", scheduleRevealCheck);
+    window.addEventListener("load", scheduleRevealCheck, { once: true });
     scheduleRevealCheck();
   } else {
+    document.querySelectorAll(".reveal").forEach((target) => target.classList.add("is-visible"));
     document.querySelectorAll(".timeline-card").forEach((card) => card.classList.add("is-visible"));
   }
 })();
