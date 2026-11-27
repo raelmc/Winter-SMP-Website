@@ -9,6 +9,72 @@
   const discordInvite = value("discordInvite");
   const whitelistChannel = value("whitelistChannel");
 
+  // Zentrale Termine: in site-config.js gepflegt; alle sichtbaren Daten und Countdown nutzen diese Werte.
+  const startTime = new Date(value("serverStart") || "2027-01-08T20:00:00+01:00");
+  const diamondTime = new Date(value("diamondUnlock") || "2027-01-15T20:00:00+01:00");
+  const endTime = new Date(value("endUnlock") || "2027-01-22T20:00:00+01:00");
+  const germanDate = (date, options) => new Intl.DateTimeFormat("de-DE", { timeZone: "Europe/Berlin", ...options }).format(date);
+  setText("#home-start-date", `${new Intl.DateTimeFormat("de-DE", { day: "numeric", month: "short", timeZone: "Europe/Berlin" }).format(startTime)} (${germanDate(startTime, { hour: "2-digit", minute: "2-digit", hourCycle: "h23" })})`);
+  const startLongDateTime = `${germanDate(startTime, { day: "numeric", month: "long", year: "numeric" })}, ${germanDate(startTime, { hour: "2-digit", minute: "2-digit", hourCycle: "h23" })} Uhr`;
+  const faqItems = [
+    { question: "Wann startet der Server?", answer: `Am ${startLongDateTime}.` },
+    { question: "Kann ich mit Java und Bedrock spielen?", answer: "Ja, beide Editionen werden unterstützt." },
+    { question: "Wie komme ich auf die Whitelist?", answer: "Die Anleitung findest du im Join-Bereich." },
+    { question: "Wann werden Diamond, Netherite und das End freigeschaltet?", answer: `Diamond ab ${germanDate(diamondTime, { day: "numeric", month: "long" })}, Netherite und das End ab ${germanDate(endTime, { day: "numeric", month: "long" })}, jeweils um 20:00 Uhr.` },
+    { question: "Wo finde ich die Server-IP?", answer: "Sie wird im Join-Bereich veröffentlicht. Bis dahin steht dort „Coming soon“." }
+  ];
+  setText("#info-start-date", startLongDateTime);
+  const progressionDates = { start: startTime, diamond: diamondTime, end: endTime };
+  document.querySelectorAll("[data-progression-date]").forEach((node) => {
+    const date = progressionDates[node.dataset.progressionDate];
+    if (date) {
+      const day = germanDate(date, { day: "numeric" });
+      const month = germanDate(date, { month: "short" }).replace(".", "").toUpperCase();
+      node.textContent = `${day}. ${month} · ${germanDate(date, { hour: "2-digit", minute: "2-digit", hourCycle: "h23" })} UHR`;
+    }
+  });
+
+  const countdown = document.querySelector(".countdown");
+  const countdownFields = Object.fromEntries(["days", "hours", "minutes", "seconds"].map((unit) => [unit, document.querySelector(`[data-countdown="${unit}"]`)]));
+  const countdownLive = document.querySelector(".countdown-live");
+  let countdownExpired = false;
+  const updateCountdown = () => {
+    const remaining = startTime.getTime() - Date.now();
+    if (remaining <= 0) {
+      countdown.querySelectorAll(".countdown-unit").forEach((unit) => { unit.hidden = true; });
+      countdownLive.hidden = false;
+      countdown.setAttribute("aria-label", "Server ist LIVE");
+      countdownExpired = true;
+      return;
+    }
+    const seconds = Math.floor(remaining / 1000);
+    const values = { days: Math.floor(seconds / 86400), hours: Math.floor(seconds / 3600) % 24, minutes: Math.floor(seconds / 60) % 60, seconds: seconds % 60 };
+    Object.entries(values).forEach(([unit, amount]) => { countdownFields[unit].textContent = String(amount).padStart(2, "0"); });
+  };
+  updateCountdown();
+  if (!countdownExpired) window.setInterval(updateCountdown, 1000);
+
+  // Q&A-Inhalte sind oben unter „faqItems“ zentral gebündelt und leicht änderbar.
+  const qaList = document.querySelector("#qa-list");
+  faqItems.forEach(({ question, answer }, index) => {
+    const details = document.createElement("details");
+    details.className = "glass qa-item";
+    const summary = document.createElement("summary");
+    const title = document.createElement("strong");
+    title.textContent = question;
+    const arrow = document.createElement("span");
+    arrow.className = "chevron";
+    arrow.setAttribute("aria-hidden", "true");
+    arrow.textContent = "⌄";
+    const response = document.createElement("p");
+    response.className = "qa-answer";
+    response.textContent = answer;
+    summary.append(title, arrow);
+    details.append(summary, response);
+    details.setAttribute("aria-label", `Frage ${index + 1}`);
+    qaList.append(details);
+  });
+
   if (serverIp) {
     setText(".server-ip-value", serverIp);
     setText(".hero-ip-value", serverIp);
@@ -16,12 +82,8 @@
       button.hidden = false;
       button.addEventListener("click", async () => {
         const feedback = document.querySelector(".copy-feedback");
-        try {
-          await navigator.clipboard.writeText(serverIp);
-          feedback.textContent = "Server-IP wurde kopiert.";
-        } catch {
-          feedback.textContent = `Server-IP: ${serverIp}`;
-        }
+        try { await navigator.clipboard.writeText(serverIp); feedback.textContent = "Server-IP wurde kopiert."; }
+        catch { feedback.textContent = `Server-IP: ${serverIp}`; }
       });
     });
     setText(".placeholder-value", serverIp);
@@ -32,12 +94,8 @@
     document.querySelectorAll(".copy-button").forEach((button) => {
       button.hidden = false;
       button.addEventListener("click", async () => {
-        try {
-          await navigator.clipboard.writeText(bedrockIp);
-          document.querySelector(".copy-feedback").textContent = "Server-IP wurde kopiert.";
-        } catch {
-          document.querySelector(".copy-feedback").textContent = `Server-IP: ${bedrockIp}`;
-        }
+        try { await navigator.clipboard.writeText(bedrockIp); document.querySelector(".copy-feedback").textContent = "Server-IP wurde kopiert."; }
+        catch { document.querySelector(".copy-feedback").textContent = `Server-IP: ${bedrockIp}`; }
       });
     });
   }
@@ -45,22 +103,14 @@
 
   if (discordInvite) {
     document.querySelectorAll(".discord-link").forEach((link) => {
-      link.href = discordInvite;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      link.hidden = false;
+      link.href = discordInvite; link.target = "_blank"; link.rel = "noopener noreferrer"; link.hidden = false;
     });
     const footerDiscord = document.querySelector(".footer-discord");
     const footerIcon = document.querySelector(".discord-icon");
     if (footerDiscord && footerIcon) {
       const footerLink = document.createElement("a");
-      footerLink.className = "discord-link footer-discord-link";
-      footerLink.href = discordInvite;
-      footerLink.target = "_blank";
-      footerLink.rel = "noopener noreferrer";
-      footerLink.setAttribute("aria-label", "Winter SMP auf Discord");
-      footerIcon.replaceWith(footerLink);
-      footerLink.append(footerIcon);
+      footerLink.className = "discord-link footer-discord-link"; footerLink.href = discordInvite; footerLink.target = "_blank"; footerLink.rel = "noopener noreferrer";
+      footerLink.setAttribute("aria-label", "Winter SMP auf Discord"); footerIcon.replaceWith(footerLink); footerLink.append(footerIcon);
     }
   }
 
@@ -72,13 +122,14 @@
     else if (note) note.textContent = "Discord-Einladung folgt noch.";
   }
 
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   // Scroll reveal is grouped by section so one trigger reveals the whole category.
-  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if (!reducedMotion) {
     const revealSections = Array.from(document.querySelectorAll("main .section:not(.hero)"));
     const footer = document.querySelector("footer.site-footer");
     const revealGroups = revealSections.map((section) => ({
       trigger: section,
-      targets: Array.from(section.querySelectorAll(".section-heading, .info-card, .join-info, .friends-note, .server-box, .rule-card, .mods-card, .timeline-card, .team-card"))
+      targets: Array.from(section.querySelectorAll(".section-heading, .info-card, .join-info, .friends-note, .server-box, .rule-card, .mods-card, .timeline-card, .team-details, .qa-item"))
     })).filter((group) => group.targets.length);
     if (footer) revealGroups.push({ trigger: footer, targets: [footer] });
 
@@ -88,10 +139,7 @@
     });
     const revealGroup = ({ trigger, targets }) => {
       if (trigger.id === "progression") trigger.classList.add("timeline-started");
-      targets.forEach((target) => {
-        target.style.setProperty("--reveal-delay", "0ms");
-        target.classList.add("is-visible");
-      });
+      targets.forEach((target) => { target.style.setProperty("--reveal-delay", "0ms"); target.classList.add("is-visible"); });
     };
     let revealCheckPending = false;
     const checkRevealPositions = () => {
@@ -108,10 +156,8 @@
     };
     const scheduleRevealCheck = () => {
       if (revealCheckPending) return;
-      revealCheckPending = true;
-      window.requestAnimationFrame(checkRevealPositions);
+      revealCheckPending = true; window.requestAnimationFrame(checkRevealPositions);
     };
-
     document.querySelectorAll('.nav-links a[href^="#"]').forEach((link) => {
       link.addEventListener("click", () => {
         const section = document.querySelector(link.getAttribute("href"));
@@ -119,9 +165,10 @@
         if (group) revealGroup(group);
       });
     });
-
     window.addEventListener("scroll", scheduleRevealCheck, { passive: true });
     window.addEventListener("resize", scheduleRevealCheck, { passive: true });
     scheduleRevealCheck();
+  } else {
+    document.querySelectorAll(".timeline-card").forEach((card) => card.classList.add("is-visible"));
   }
 })();
