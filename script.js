@@ -27,7 +27,7 @@
     { question: "Ich kann dem Server nicht beitreten. Was kann ich tun?", answer: "Prüfe zuerst, ob du deinen Minecraft-Namen richtig in den Whitelist-Kanal geschrieben hast und die Serveradresse stimmt. Bei Bedrock brauchst du zusätzlich den angegebenen Port. Wenn es trotzdem nicht klappt, öffne ein Support-Ticket auf Discord und schick am besten die Fehlermeldung mit." },
     { question: "Kann ich auch später noch einsteigen?", answer: "Ja, du musst nicht direkt zum Start dabei sein. Trag einfach deinen Minecraft-Namen auf Discord für die Whitelist ein und steig ein, wenn du Zeit hast." },
     { question: "Warum werden die Rüstungsstufen nach und nach freigeschaltet?", answer: "Die gestaffelte Freischaltung sorgt für längeren Spielspaß. Außerdem können Spielerinnen und Spieler, die weniger Zeit haben, leichter mithalten." },
-    { question: "Ab wann darf ich Diamant- und Netherite-Rüstung tragen?", answer: "Zum Start ist Eisen die höchste erlaubte Rüstungsstufe. Ab dem 11. Dezember um 20 Uhr darfst du Diamantrüstung tragen. Netherite-Rüstung darfst du erst nach dem End-Fight-Event am 18. Dezember craften und tragen. Falls du beim Event von der End-Insel ins Void fällst und deine Ausrüstung verlierst, verlierst du so wenigstens keine Netherite-Rüstung." },
+    { question: "Ab wann darf ich Diamant- und Netherite-Rüstung tragen?", answer: "Zum Start ist Eisen die höchste erlaubte Rüstungsstufe. Ab dem 15. Januar 2027 um 20:00 Uhr darfst du Diamantrüstung tragen. Der Endkampf findet am 22. Januar 2027 um 20:00 Uhr statt. Netherite kann erst nach dem Endkampf gecraftet werden. So verlierst du keine Netherite-Ausrüstung, falls du beim Endkampf von der End-Insel fällst und deine Ausrüstung verlierst." },
     { question: "Muss ich beim End-Fight-Event dabei sein?", answer: "Nein, die Teilnahme ist freiwillig. Wenn du an dem Termin keine Zeit hast, kannst du trotzdem ganz normal weiterspielen." },
     { question: "Brauche ich Mods, um mitzuspielen?", answer: "Nein, Mods sind keine Pflicht. Die Mods aus der Liste für Java (PC) und das Modpack Rendarium sind aber ausdrücklich empfohlen." },
     { question: "Woher weiß ich, ob ein Mod oder eine Aktion im Spiel erlaubt ist?", answer: "Schau zuerst unter „Regeln“ in die Listen „Erlaubt“ und „Verboten“. Wenn du dir danach immer noch unsicher bist oder etwas unklar ist, frag auf Discord nach, bevor du den Mod benutzt oder die Aktion ausprobierst." },
@@ -43,6 +43,29 @@
       node.textContent = `${day}. ${month} · ${germanDate(date, { hour: "2-digit", minute: "2-digit", hourCycle: "h23" })} UHR`;
     }
   });
+
+  const progressionTimers = document.querySelectorAll("[data-progression-countdown]");
+  const updateProgressionCountdowns = () => {
+    progressionTimers.forEach((timer) => {
+      const target = progressionDates[timer.dataset.progressionCountdown];
+      const live = timer.querySelector(".progression-live");
+      const units = Array.from(timer.querySelectorAll("[data-part]")).map((part) => part.parentElement);
+      const remaining = target.getTime() - Date.now();
+      if (remaining <= 0) {
+        units.forEach((unit) => { unit.hidden = true; });
+        live.hidden = false;
+        timer.setAttribute("aria-label", "Freigeschaltet: LIVE");
+        return;
+      }
+      const totalSeconds = Math.floor(remaining / 1000);
+      const values = { days: Math.floor(totalSeconds / 86400), hours: Math.floor(totalSeconds / 3600) % 24, minutes: Math.floor(totalSeconds / 60) % 60, seconds: totalSeconds % 60 };
+      Object.entries(values).forEach(([unit, amount]) => {
+        timer.querySelector(`[data-part="${unit}"]`).textContent = String(amount).padStart(2, "0");
+      });
+    });
+  };
+  updateProgressionCountdowns();
+  window.setInterval(updateProgressionCountdowns, 1000);
 
   const countdown = document.querySelector(".countdown");
   const countdownFields = Object.fromEntries(["days", "hours", "minutes", "seconds"].map((unit) => [unit, document.querySelector(`[data-countdown="${unit}"]`)]));
