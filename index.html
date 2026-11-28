@@ -52,10 +52,10 @@
         <article class="glass info-card date-card reveal"><h3>Startdatum</h3><p>Der Server öffnet am <strong id="info-start-date">8. Januar 2027, 20:00 Uhr</strong>.</p><span class="card-note">Trag es dir schon mal ein!</span></article>
         <article class="glass info-card ip-card reveal"><h3>Server-IP</h3><p class="placeholder-value">Coming soon</p><p>Die Adresse teilen wir hier, sobald alles bereit ist.</p></article>
         <article class="glass info-card discord-card reveal"><h3>Discord</h3><p>Alle Neuigkeiten und die Whitelist findest du auf unserem Discord.</p><a class="text-link discord-link" aria-label="Winter SMP auf Discord" hidden>Zum Discord <span aria-hidden="true">↗</span></a><span class="discord-soon">Einladungslink: Coming soon</span></article>
-        <article class="glass info-card version-card reveal"><h3>Server-Version</h3><p><strong>Bedrock:</strong> 26.3 (neueste Bedrock-Version)</p><p><strong>Serversoftware:</strong> Paper</p></article>
+        <article class="glass info-card version-card reveal"><h3>Server-Version</h3><p><strong>Java (PC):</strong> 26.3 Vanilla (kompatibel mit clientseitigen Fabric-Mods)</p><p><strong>Bedrock:</strong> 26.3 (neueste Bedrock-Version)</p><p><strong>Serversoftware:</strong> Paper</p></article>
       </div>
       <div class="glass join-info reveal">
-        <div class="join-info-intro"><p class="eyebrow">JAVA &amp; BEDROCK</p><h3>Alle können mitspielen</h3><p>Der Server unterstützt sowohl <strong>Minecraft Java</strong> als auch <strong>Bedrock</strong>.</p></div>
+        <div class="join-info-intro"><p class="eyebrow">JAVA (PC) &amp; BEDROCK</p><h3>Alle können mitspielen</h3><p>Der Server unterstützt sowohl <strong>Minecraft Java (PC)</strong> als auch <strong>Bedrock</strong>.</p></div>
         <div class="whitelist"><div class="whitelist-title"><span class="step-icon">✓</span><div><p class="card-kicker">SO FUNKTIONIERT’S</p><h3>Whitelist in 3 Schritten</h3></div></div><ol class="steps"><li><span>01</span><p>Tritt unserem Discord bei.</p></li><li><span>02</span><p>Schreib deinen Minecraft-Namen in den Whitelist-Kanal.</p></li><li><span>03</span><p>Du wirst automatisch zur Whitelist hinzugefügt.</p></li></ol><p class="small-note">Discord-Einladung und genauer Kanalname folgen noch.</p></div>
       </div>
       <aside class="friends-note reveal"><span aria-hidden="true">♡</span><p><strong>Freunde aus der Schule und von außerhalb sind willkommen – ladet sie gerne ein!</strong></p></aside>
@@ -70,20 +70,48 @@
           <div class="server-value"><span>BEDROCK-PORT</span><strong class="bedrock-port-value">Coming soon</strong></div>
         </div>
         <p class="copy-feedback" aria-live="polite"></p>
-        <details class="console-guide">
-          <summary><span class="console-summary-icon">▹</span><span><strong>Auf der Konsole beitreten</strong><small>Schau dir das kurze Tutorial an</small></span><span class="chevron" aria-hidden="true">⌄</span></summary>
-          <div class="tutorial-content"><div class="video-frame"><iframe src="https://www.youtube-nocookie.com/embed/fIcVgVbRT0o" title="Tutorial: Auf der Konsole einem Minecraft-Server beitreten" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><a class="text-link" href="https://www.youtube.com/watch?v=fIcVgVbRT0o" target="_blank" rel="noopener noreferrer">Auf YouTube ansehen <span aria-hidden="true">↗</span></a></div>
-        </details>
+        <p class="join-whitelist-note">Bevor du joinst: Schreib deinen Minecraft-Namen in den Whitelist-Kanal auf Discord. Du wirst automatisch zur Whitelist hinzugefügt.</p>
+        <div class="join-guides">
+          <details class="console-guide">
+            <summary><span class="console-summary-icon">▹</span><span><strong>Konsole · Xbox, PlayStation &amp; Switch</strong></span><span class="chevron" aria-hidden="true">⌄</span></summary>
+            <div class="tutorial-content">
+              <p>Auf Konsolen fehlt der Button „Server hinzufügen“. Mit BedrockConnect kannst du trotzdem eine eigene Serveradresse eingeben.</p>
+              <ol>
+                <li>Schließe Minecraft. Öffne auf deiner Konsole die Netzwerkeinstellungen und suche in den erweiterten Einstellungen deiner Internetverbindung nach „DNS“. Wähle „Manuell“. Auf der Switch findest du die Option unter „Systemeinstellungen → Internet → Interneteinstellungen → dein Netzwerk → Einstellungen ändern“.</li>
+                <li>Trage als primären DNS-Server die Adresse einer BedrockConnect-Instanz ein. Nutze dafür die Angaben aus der <a href="https://github.com/Pugmatt/BedrockConnect" target="_blank" rel="noopener noreferrer">BedrockConnect-Anleitung</a>. Die DNS-Adresse ist nicht die Winter-SMP-IP. Speichere die Einstellungen.</li>
+                <li>Starte Minecraft Bedrock, melde dich mit deinem Microsoft-Konto an und gehe auf „Spielen → Server“. Wähle einen der vorgestellten Server aus, den die BedrockConnect-Anleitung für diese Methode nennt. Wenn die Einrichtung geklappt hat, öffnet sich statt des vorgestellten Servers das BedrockConnect-Menü.</li>
+                <li>Wähle „Connect to a Server“. Trage die Winter-SMP-IP und den Bedrock-Port aus der Box oben ein und bestätige die Verbindung.</li>
+              </ol>
+              <p class="small-note">Falls das Menü nicht erscheint, starte Minecraft nach der DNS-Änderung komplett neu. Wenn du BedrockConnect nicht mehr nutzen willst, stell DNS wieder auf „Automatisch“. Für Online-Multiplayer kann je nach Konsole ein Abo nötig sein.</p>
+            </div>
+          </details>
+          <details class="console-guide">
+            <summary><span class="console-summary-icon">▹</span><span><strong>Handy &amp; Tablet · Android, iPhone &amp; iPad</strong></span><span class="chevron" aria-hidden="true">⌄</span></summary>
+            <div class="tutorial-content"><ol>
+              <li>Öffne Minecraft und tippe auf „Spielen → Server → Server hinzufügen“.</li>
+              <li>Gib als Namen „Winter-SMP“ ein. Trage die IP von oben bei „Serveradresse“ und den Bedrock-Port bei „Port“ ein.</li>
+              <li>Speichere den Eintrag, wähle „Winter-SMP“ aus und tippe auf „Beitreten“.</li>
+            </ol></div>
+          </details>
+          <details class="console-guide">
+            <summary><span class="console-summary-icon">▹</span><span><strong>Java (PC) · Computer</strong></span><span class="chevron" aria-hidden="true">⌄</span></summary>
+            <div class="tutorial-content"><ol>
+              <li>Starte Minecraft Java (PC) Edition und klicke auf „Mehrspieler → Server hinzufügen“.</li>
+              <li>Gib als Namen „Winter-SMP“ ein und trage die IP von oben bei „Serveradresse“ ein. Hänge den Bedrock-Port nicht an.</li>
+              <li>Klicke auf „Fertig“, wähle „Winter-SMP“ aus und klicke auf „Server beitreten“.</li>
+            </ol></div>
+          </details>
+        </div>
       </div>
     </section>
 
     <section class="section" id="rules" aria-labelledby="rules-title">
       <div class="section-heading reveal"><h2 id="rules-title">Unsere <span>Regeln</span></h2></div>
       <div class="rules-grid">
-        <article class="glass rule-card not-allowed reveal"><div class="rule-heading"><span class="rule-mark" aria-hidden="true">✕</span><h3>Verboten</h3></div><ul><li>Sinnloses Töten anderer Spieler</li><li>Sinnloses Zerstören sowie das Beschädigen oder Zerstören von Häusern und insbesondere Shops</li><li>Freecam</li><li>Freelook</li><li>Hacks (ESP, KillAura, Flight, NoFall usw.)</li><li>Seed-Cracking</li><li>Dupes (Ausnahmen: Sand, Tripwire Hooks und TNT)</li><li>X-Ray</li><li>Ausnutzen von Exploits</li><li>Pie Chart</li></ul></article>
-        <article class="glass rule-card allowed reveal"><div class="rule-heading"><span class="rule-mark" aria-hidden="true">✓</span><h3>Erlaubt</h3></div><ul><li>Performance-Mods</li><li>HUD- und Overlay-Mods</li><li>Xaero's World Map & Minimap (aber nur die Fairplay edition)</li><li>Cosmetic-Mods</li><li>NoFog (Lava, Wasser und Pulverschnee)</li><li>Fullbright</li></ul></article>
+        <article class="glass rule-card not-allowed reveal"><div class="rule-heading"><span class="rule-mark" aria-hidden="true">✕</span><h3>Verboten</h3></div><ul><li>Sinnloses Töten anderer Spieler</li><li>Sinnloses Zerstören sowie das Beschädigen oder Zerstören von Häusern und insbesondere Shops</li><li>Hacks (ESP, KillAura, Flight, NoFall usw.)</li><li>Seed-Cracking</li><li>Dupes (Ausnahmen: Sand, Tripwire Hooks und TNT)</li><li>X-Ray</li><li>Ausnutzen von Exploits</li><li>Rassismus, Sexismus, Queerfeindlichkeit und andere Formen von Diskriminierung</li><li>Beleidigungen, Belästigung und Drohungen</li><li>NSFW-Inhalte, auch in Links, Skins oder auf Schildern</li><li>Streit aus dem SMP ins echte Leben tragen oder andere deswegen per Privatnachricht belästigen</li></ul></article>
+        <article class="glass rule-card allowed reveal"><div class="rule-heading"><span class="rule-mark" aria-hidden="true">✓</span><h3>Erlaubt</h3></div><ul><li>Performance-Mods</li><li>HUD- und Overlay-Mods</li><li>Xaero's World Map & Minimap (aber nur die Fairplay edition)</li><li>Cosmetic-Mods</li><li>NoFog (Lava, Wasser und Pulverschnee)</li><li>Fullbright</li><li>Meinungsverschiedenheiten respektvoll klären und bei Bedarf das Team um Hilfe bitten</li></ul></article>
       </div>
-      <article class="glass mods-card reveal"><div><p class="card-kicker">OPTIONALE ERWEITERUNGEN</p><h3><a href="https://modrinth.com/collection/27T3r9Go" target="_blank" rel="noopener noreferrer">Java Mod Liste</a></h3></div></article>
+      <article class="glass mods-card reveal"><div class="mods-entry"><p class="card-kicker">OPTIONALE ERWEITERUNGEN</p><h3><a href="https://modrinth.com/collection/27T3r9Go" target="_blank" rel="noopener noreferrer">Java Mod Liste</a></h3></div><div class="mods-entry"><p class="card-kicker">EMPFOHLENES MODPACK</p><h3><a href="https://modrinth.com/modpack/rendarium" target="_blank" rel="noopener noreferrer">Rendarium</a></h3></div></article>
     </section>
 
     <section class="section progression-section timeline-ready" id="progression" aria-labelledby="progression-title">
@@ -114,7 +142,10 @@
 
   <footer class="site-footer glass reveal">
     <span>Website &amp; Plugin built with AI</span>
-    <span class="footer-discord"><img class="discord-icon" src="assets/discord.svg" alt="" width="30" height="30"></span>
+    <div class="footer-socials">
+      <span class="footer-discord"><img class="discord-icon" src="assets/discord.svg" alt="" width="30" height="30"></span>
+      <a class="footer-github" href="https://github.com/raelmc/Winter-SMP-Website" aria-label="Winter SMP Repository auf GitHub"><img src="assets/github.svg" alt="" width="30" height="30"></a>
+    </div>
     <span>© 2026 Rael Studios</span>
   </footer>
   <div class="toast" role="status" aria-live="polite"></div>

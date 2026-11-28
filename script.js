@@ -17,11 +17,21 @@
   setText("#home-start-date", `${new Intl.DateTimeFormat("de-DE", { day: "numeric", month: "short", timeZone: "Europe/Berlin" }).format(startTime)} (${germanDate(startTime, { hour: "2-digit", minute: "2-digit", hourCycle: "h23" })})`);
   const startLongDateTime = `${germanDate(startTime, { day: "numeric", month: "long", year: "numeric" })}, ${germanDate(startTime, { hour: "2-digit", minute: "2-digit", hourCycle: "h23" })} Uhr`;
   const faqItems = [
-    { question: "Wann startet der Server?", answer: `Am ${startLongDateTime}.` },
-    { question: "Kann ich mit Java und Bedrock spielen?", answer: "Ja, beide Editionen werden unterstützt." },
-    { question: "Wie komme ich auf die Whitelist?", answer: "Die Anleitung findest du im Join-Bereich." },
-    { question: "Wann werden Diamond, Netherite und das End freigeschaltet?", answer: `Diamond ab ${germanDate(diamondTime, { day: "numeric", month: "long" })}, Netherite und das End ab ${germanDate(endTime, { day: "numeric", month: "long" })}, jeweils um 20:00 Uhr.` },
-    { question: "Wo finde ich die Server-IP?", answer: "Sie wird im Join-Bereich veröffentlicht. Bis dahin steht dort „Coming soon“." }
+    { question: "Wie trete ich dem Winter-SMP bei?", answer: "Schreib deinen eigenen Minecraft-Namen oder den Minecraft-Namen einer Freundin oder eines Freundes in den Whitelist-Kanal auf unserem Discord. Der Name wird automatisch zur Whitelist hinzugefügt. Die Serveradresse und die Anleitungen für Java (PC) und Bedrock, inklusive Konsole, findest du unter „Beitreten“." },
+    { question: "Welche Minecraft-Version brauche ich?", answer: [
+      { text: "Java (PC): Mit Version 26.3 kannst du direkt beitreten. Mit " },
+      { link: "ViaFabricPlus", href: "https://modrinth.com/mod/viafabricplus" },
+      { text: " kannst du auch mit einer anderen Client-Version beitreten." }, { break: true },
+      { text: "Bedrock: Verwende immer die neueste Bedrock-Version." }
+    ] },
+    { question: "Ich kann dem Server nicht beitreten. Was kann ich tun?", answer: "Prüfe zuerst, ob du deinen Minecraft-Namen richtig in den Whitelist-Kanal geschrieben hast und die Serveradresse stimmt. Bei Bedrock brauchst du zusätzlich den angegebenen Port. Wenn es trotzdem nicht klappt, öffne ein Support-Ticket auf Discord und schick am besten die Fehlermeldung mit." },
+    { question: "Kann ich auch später noch einsteigen?", answer: "Ja, du musst nicht direkt zum Start dabei sein. Trag einfach deinen Minecraft-Namen auf Discord für die Whitelist ein und steig ein, wenn du Zeit hast." },
+    { question: "Warum werden die Rüstungsstufen nach und nach freigeschaltet?", answer: "Die gestaffelte Freischaltung sorgt für längeren Spielspaß. Außerdem können Spielerinnen und Spieler, die weniger Zeit haben, leichter mithalten." },
+    { question: "Ab wann darf ich Diamant- und Netherite-Rüstung tragen?", answer: "Zum Start ist Eisen die höchste erlaubte Rüstungsstufe. Ab dem 11. Dezember um 20 Uhr darfst du Diamantrüstung tragen. Netherite-Rüstung darfst du erst nach dem End-Fight-Event am 18. Dezember craften und tragen. Falls du beim Event von der End-Insel ins Void fällst und deine Ausrüstung verlierst, verlierst du so wenigstens keine Netherite-Rüstung." },
+    { question: "Muss ich beim End-Fight-Event dabei sein?", answer: "Nein, die Teilnahme ist freiwillig. Wenn du an dem Termin keine Zeit hast, kannst du trotzdem ganz normal weiterspielen." },
+    { question: "Brauche ich Mods, um mitzuspielen?", answer: "Nein, Mods sind keine Pflicht. Die Mods aus der Liste für Java (PC) und das Modpack Rendarium sind aber ausdrücklich empfohlen." },
+    { question: "Woher weiß ich, ob ein Mod oder eine Aktion im Spiel erlaubt ist?", answer: "Schau zuerst unter „Regeln“ in die Listen „Erlaubt“ und „Verboten“. Wenn du dir danach immer noch unsicher bist oder etwas unklar ist, frag auf Discord nach, bevor du den Mod benutzt oder die Aktion ausprobierst." },
+    { question: "Was mache ich, wenn jemand mein Haus zerstört oder gegen die Regeln verstößt?", answer: "Öffne ein Support-Ticket auf unserem Discord. Bleib dabei immer sachlich und beschreib, was passiert ist. Wenn du die Spielernamen und die ungefähre Uhrzeit kennst, schreib sie dazu. Screenshots oder Aufnahmen helfen, sind aber kein Muss. Das Mod-Team schaut sich den Vorfall an und klärt ihn mit dir im Ticket." }
   ];
   setText("#info-start-date", startLongDateTime);
   const progressionDates = { start: startTime, diamond: diamondTime, end: endTime };
@@ -66,9 +76,21 @@
     arrow.className = "chevron";
     arrow.setAttribute("aria-hidden", "true");
     arrow.textContent = "⌄";
-    const response = document.createElement("p");
+    const response = document.createElement("div");
     response.className = "qa-answer";
-    response.textContent = answer;
+    if (Array.isArray(answer)) {
+      answer.forEach((part) => {
+        if (part.break) response.append(document.createElement("br"));
+        else if (part.link) {
+          const link = document.createElement("a");
+          link.href = part.href;
+          link.textContent = part.link;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          response.append(link);
+        } else response.append(document.createTextNode(part.text));
+      });
+    } else response.textContent = answer;
     summary.append(title, arrow);
     details.append(summary, response);
     details.setAttribute("aria-label", `Frage ${index + 1}`);
